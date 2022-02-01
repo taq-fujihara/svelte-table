@@ -1,64 +1,25 @@
-<div class="container">
+<div class="container" style={containerStyle}>
   <table>
-    {#each columns as column}
-      <col style={`width: ${column.width}px`}>
-    {/each}
-    <tbody>
-      {#each data as datum}
-        <tr>
-          {#each columns as column}
-            <td class={column.fixed && 'fixed-cell'}>
-              {datum[column.name]}
-            </td>
-          {/each}
-        </tr>
-      {/each}
-    </tbody>
-    <thead>
-      <tr>
-        {#each columns as column, i}
-          <th class={column.fixed && 'fixed-cell'}>
-            {column.name}
-          </th>
-        {/each}
-      </tr>
-    </thead>
+    <TableColGroup {columns} />
+    <TableBody {columns} {data} />
+    <TableHeader {columns} />
   </table>
 </div>
 
 <script>
-  let columns = [
-    {
-      name: 'col1',
-      width: 150,
-      fixed: true,
-    },
-    {
-      name: 'col2',
-      width: 150,
-    },
-    {
-      name: 'col3',
-      width: 150,
-    },
-    {
-      name: 'col4',
-      width: 150,
-    },
-    {
-      name: 'col5',
-      width: 150,
-    },
-  ]
-  let data = [
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-    { col1: 'val1', col2: 'val2', col3: 'val3', col4: 'val4', col5: 'val5' },
-  ]
+  import TableColGroup from './TableColGroup.svelte'
+  import TableHeader from './TableHeader.svelte'
+  import TableBody from './TableBody.svelte'
+
+  export let width = undefined
+  export let height = undefined
+  export let columns = []
+  export let data = []
+
+  $: containerStyle = [
+      width !== undefined ? `width: ${width}px` : '',
+      height !== undefined ? `height: ${height}px` : '',
+    ].join(';')
 </script>
 
 <style>
@@ -68,8 +29,6 @@
 
   .container {
     position: relative;
-    width: 500px;
-    height: 200px;
     overflow: auto;
 
     border-top: 1px solid #e0e0e0;
@@ -83,44 +42,7 @@
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
-    width: 100%;
-  }
-
-  thead {
-    position: sticky;
-    top: 0;
-  }
-
-  th, td {
-    padding: 10px;
-  }
-
-  th {
-    background-color: #eee;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  th:not(:first-child) {
-    border-left: 1px solid #e0e0e0;
-  }
-
-  td {
-    background-color: #fff;
-  }
-  td:not(:first-child) {
-    border-left: 1px solid #e0e0e0;
-  }
-
-  tr:not(:last-child) td {
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  .fixed-cell {
-    position: sticky;
-    left: 0;
-    border-right: 1px solid #e0e0e0;
-  }
-
-  .first-of-non-fixed-cell {
-    border-left: 0;
+    /* width: 100%; */
+    width: 0;
   }
 </style>
